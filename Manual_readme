@@ -1,0 +1,217 @@
+
+
+--- creating a database
+CREATE DATABASE PayrollDB;
+GO
+-------------
+
+---using database
+USE PayrollDB:
+------------
+
+---table creations, 
+---used for all core table like,
+---Employees, PayRates, HrsWorked, Payroll, PAyRateAudit.
+--------------
+
+ ---Inserting data
+INSERT INTO Employees (FirstName, LastName, AddressLine, City, State, ZipCode, Phone, Email, IsActive)
+VALUES ('John', 'Smith', '123 Oak St', 'Shreveport', 'LA', '71101', '3185551001', 'john.smith@email.com', 1);
+
+---Stored Procedures:
+
+---Create procedure
+
+---Used for:
+---adding employees, setting pay rate and generating payroll
+
+CREATE PROCEDURE ProcedureName
+    @Parameter1 DataType,
+    @Parameter2 DataType
+AS
+BEGIN
+    -- SQL logic here
+END;
+GO
+-----------
+
+---adding employee
+CREATE PROCEDURE sp_AddEmployee ...
+
+---set payrate
+CREATE PROCEDURE sp_SetPayRate ...
+
+---generate weekly payroll
+CREATE PROCEDURE sp_GenerateWeeklyPayroll ...
+
+---Execute Procedure
+EXEC sp_AddEmployee
+    @FirstName = 'Chris',
+    @LastName = 'Taylor',
+    @AddressLine = '999 Test St',
+    @City = 'Shreveport',
+    @State = 'LA',
+    @ZipCode = '71101',
+    @Phone = '3185559999',
+    @Email = 'chris.taylor@email.com';
+
+
+---Trigger
+---Create trigger
+--- Used to automatically log pay rate changes:
+CREATE TRIGGER trg_AuditPayRateChange
+ON PayRates
+AFTER INSERT
+AS
+BEGIN
+    -- trigger logic
+END;
+GO
+
+---Audit table
+--Audit/history table:
+ CREATE TABLE PayRateAudit (
+    AuditID INT PRIMARY KEY IDENTITY(1,1),
+    EmployeeID INT NOT NULL,
+    OldRate DECIMAL(10,2),
+    NewRate DECIMAL(10,2),
+    ChangeDate DATETIME DEFAULT GETDATE()
+);
+
+------
+---Queries for reporting/demo
+---Select all employees
+
+SELECT * FROM Employees;
+
+-----
+---join query
+SELECT 
+    e.EmployeeID,
+    e.FirstName,
+    e.LastName,
+    p.WeekStartDate,
+    p.GrossPay
+FROM Payroll p
+JOIN Employees e
+    ON p.EmployeeID = e.EmployeeID;
+
+---filter query
+--used for overtime employees
+SELECT *
+FROM HoursWorked
+WHERE HoursWorked > 40;
+
+----
+---Aggregate query
+---used for total payroll
+SELECT 
+    WeekStartDate,
+    SUM(GrossPay) AS TotalWeeklyPayroll
+FROM Payroll
+GROUP BY WeekStartDate;
+-----
+---order results
+ORDER BY ChangeDate DESC;
+
+---User/login creation
+---Create SQL Server login
+---Used to create server-level logins
+CREATE LOGIN PayrollAdminLogin WITH PASSWORD = 'Admin@12345';
+CREATE LOGIN PayrollClerkLogin WITH PASSWORD = 'Clerk@12345';
+CREATE LOGIN PayrollViewerLogin WITH PASSWORD = 'Viewer@12345';
+GO
+---set default database
+ALTER LOGIN PayrollAdminLogin WITH DEFAULT_DATABASE = PayrollDB;
+ALTER LOGIN PayrollClerkLogin WITH DEFAULT_DATABASE = PayrollDB;
+ALTER LOGIN PayrollViewerLogin WITH DEFAULT_DATABASE = PayrollDB;
+
+-----
+
+
+----------------------------------------------
+
+
+--- Database users
+---Create user mapped to login
+---Used inside PayrollDB
+
+CREATE USER PayrollAdminUser FOR LOGIN PayrollAdminLogin;
+CREATE USER PayrollClerkUser FOR LOGIN PayrollClerkLogin;
+CREATE USER PayrollViewerUser FOR LOGIN PayrollViewerLogin;
+GO
+----
+
+---Roles
+---Create roles
+
+CREATE ROLE PayrollAdminRole;
+CREATE ROLE PayrollClerkRole;
+CREATE ROLE PayrollViewerRole;
+GO
+-----------
+
+---Add users to roles
+
+ALTER ROLE PayrollAdminRole ADD MEMBER PayrollAdminUser;
+ALTER ROLE PayrollClerkRole ADD MEMBER PayrollClerkUser;
+ALTER ROLE PayrollViewerRole ADD MEMBER PayrollViewerUser;
+GO
+
+------
+---Permissions
+---Grant table permissions
+---Example:
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON Employees TO PayrollAdminRole;
+
+----
+
+---Grant procedure execution
+GRANT EXECUTE ON OBJECT::dbo.sp_AddEmployee TO PayrollAdminRole;
+GRANT EXECUTE ON OBJECT::dbo.sp_SetPayRate TO PayrollAdminRole;
+GRANT EXECUTE ON OBJECT::dbo.sp_GenerateWeeklyPayroll TO PayrollAdminRole;
+
+---Read-only access
+
+GRANT SELECT ON Employees TO PayrollViewerRole;
+
+----Login/testing commands
+----Check current login
+
+SELECT SYSTEM_USER AS LoginName, USER_NAME() AS DatabaseUser;
+
+---Switch to correct database
+
+USE PayrollDB;
+GO
+
+---Useful verification commands
+---View all SQL logins
+
+SELECT name, is_disabled
+FROM sys.sql_logins;
+Check database users
+SELECT name
+FROM sys.database_principals;
+Check role membership
+SELECT 
+    dp1.name AS RoleName,
+    dp2.name AS UserName
+FROM sys.database_role_members drm
+JOIN sys.database_principals dp1
+    ON drm.role_principal_id = dp1.principal_id
+JOIN sys.database_principals dp2
+    ON drm.member_principal_id = dp2.principal_id
+ORDER BY dp1.name, dp2.name;
+
+
+---Optional admin/fix commands used
+
+
+---Drop user if needed
+DROP USER IF EXISTS PayrollAdminUser;
+
+---Reset login password
+
+ALTER LOGIN PayrollAdminLogin WITH PASSWORD = 'Admin@12345';
