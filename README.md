@@ -19,13 +19,26 @@ This project is a backend-focused Employee Payroll Management System built using
 - Logins, users, roles, and permissions
 
 ## Files
-- 01_create_database.sql` → creates the database
-- 02_create_tables.sql` → creates all project tables
-- 03_insert_sample_data.sql` → inserts sample records
-- 04_stored_procedures.sql` → creates procedures
-- 05_triggers.sql` → creates triggers
-- 06_demo_queries.sql` → contains presentation queries
-- 07_roles_and_permissions.sql` → sets up security
+- 01_create_database.sql
+  → creates the database
+  
+- 02_create_tables.sql
+  → creates all project tables
+  
+- 03_insert_sample_data.sql
+  → inserts sample records
+  
+- 04_stored_procedures.sql
+  → creates procedures
+  
+- 05_triggers.sql
+  → creates triggers
+  
+- 06_demo_queries.sql
+  → contains presentation queries
+  
+- 07_roles_and_permissions.sql
+  → sets up security
 
 ## Future plans
  - Frontend layout for ease of access
