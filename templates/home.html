@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-card">
+        <h1>Employee Payroll Management System</h1>
+        <p class="hero-text">
+            A SQL Server and Flask-based payroll system for managing employees,
+            pay rates, working hours, payroll generation, and employee status.
+        </p>
+
+        <div class="hero-actions">
+            <a href="{{ url_for('employees') }}" class="btn btn-primary">View Employees</a>
+            <a href="{{ url_for('add_employee') }}" class="btn btn-success">Add Employee</a>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+        <h2>Employees</h2>
+        <p>View active employees and manage employee records.</p>
+        <a href="{{ url_for('employees') }}" class="btn btn-primary">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Inactive Employees</h2>
+        <p>Track deactivated employees and restore them when needed.</p>
+        <a href="{{ url_for('inactive_employees') }}" class="btn btn-secondary">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Add Employee</h2>
+        <p>Create a new employee record using the stored procedure.</p>
+        <a href="{{ url_for('add_employee') }}" class="btn btn-success">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Set Pay Rate</h2>
+        <p>Assign hourly rates and maintain historical pay records.</p>
+        <a href="{{ url_for('set_payrate') }}" class="btn btn-primary">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Enter Hours</h2>
+        <p>Record employee working hours for weekly payroll processing.</p>
+        <a href="{{ url_for('enter_hours') }}" class="btn btn-primary">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Generate Payroll</h2>
+        <p>Run payroll calculations using stored procedures from the web app.</p>
+        <a href="{{ url_for('generate_payroll') }}" class="btn btn-danger">Open</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Test Database</h2>
+        <p>Verify that Flask is connected properly to SQL Server.</p>
+        <a href="{{ url_for('test_db') }}" class="btn btn-secondary">Run Test</a>
+    </div>
+
+</div>
+{% endblock %}

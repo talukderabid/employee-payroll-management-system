@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-card">
+    <h1>Generate Payroll</h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Employee</label>
+            <select name="employee_id">
+                {% for emp in employees %}
+                    <option value="{{ emp.EmployeeID }}">
+                        {{ emp.FirstName }} {{ emp.LastName }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Week Start Date</label>
+            <input type="date" name="date" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Generate Payroll</button>
+    </form>
+</div>
+
+<br>
+
+{% if payroll %}
+<div class="card">
+    <h2>Payroll Result</h2>
+
+    <table class="table">
+        <tr>
+            <th>Employee ID</th>
+            <th>Week Start</th>
+            <th>Regular Hours</th>
+            <th>Overtime Hours</th>
+            <th>Hourly Rate</th>
+            <th>Gross Pay</th>
+            <th>Payslip</th>
+        </tr>
+
+        {% for row in payroll %}
+        <tr>
+            <td>{{ row.EmployeeID }}</td>
+            <td>{{ row.WeekStartDate }}</td>
+            <td>{{ row.RegularHours }}</td>
+            <td>{{ row.OvertimeHours }}</td>
+            <td>{{ row.HourlyRate }}</td>
+            <td>{{ row.GrossPay }}</td>
+            <td>
+                <a 
+                    href="{{ url_for('download_payslip', employee_id=row.EmployeeID, week_start=row.WeekStartDate.strftime('%Y-%m-%d')) }}"
+                    class="btn btn-success"
+                >
+                    Download PDF
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+{% endblock %}

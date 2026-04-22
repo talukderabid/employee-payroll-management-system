@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-card">
+    <h1>Enter Hours Worked</h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Employee</label>
+            <select name="employee_id">
+                {% for emp in employees %}
+                    <option value="{{ emp.EmployeeID }}">
+                        {{ emp.FirstName }} {{ emp.LastName }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Week Start Date</label>
+            <input type="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Hours Worked</label>
+            <input name="hours" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Hours</button>
+    </form>
+</div>
+{% endblock %}

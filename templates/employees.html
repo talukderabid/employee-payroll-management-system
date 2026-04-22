@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Active Employees</h1>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th>Action</th>
+        </tr>
+
+        {% for emp in employees %}
+        <tr>
+            <td>{{ emp.EmployeeID }}</td>
+            <td>{{ emp.FirstName }} {{ emp.LastName }}</td>
+            <td>{{ emp.City }}</td>
+            <td>{{ emp.State }}</td>
+            <td>{{ emp.Email }}</td>
+            <td>{{ emp.IsActive }}</td>
+            <td>
+                <form action="{{ url_for('deactivate_employee', employee_id=emp.EmployeeID) }}" method="POST">
+                    <button type="submit" class="btn btn-danger">Deactivate</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payroll App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" href="{{ url_for('home') }}">Payroll App</a>
+
+            <div class="nav-links">
+                <a href="{{ url_for('employees') }}">Employees</a>
+                <a href="{{ url_for('inactive_employees') }}">Inactive Employees</a>
+                <a href="{{ url_for('add_employee') }}">Add Employee</a>
+                <a href="{{ url_for('set_payrate') }}">Set Pay Rate</a>
+                <a href="{{ url_for('enter_hours') }}">Enter Hours</a>
+                <a href="{{ url_for('generate_payroll') }}">Generate Payroll</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="page-container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
