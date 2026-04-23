@@ -3,7 +3,7 @@
 ## Overview
 This project is a backend-focused Employee Payroll Management System built using SQL Server. It manages employee records, pay rates, work hours, payroll generation, and role-based access control.
 
-## Current Main Features
+# Current Main Features
 - Add and manage employees
 - Assign and track pay rates
 - Record weekly hours worked
